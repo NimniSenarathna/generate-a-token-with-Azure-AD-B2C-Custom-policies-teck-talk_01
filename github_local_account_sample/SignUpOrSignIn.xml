@@ -13,25 +13,20 @@
     <PolicyId>B2C_1A_TrustFrameworkExtensions</PolicyId>
   </BasePolicy>
 
-  <RelyingParty>
-    <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
-    <Endpoints>
-      <!--points to refresh token journey when app makes refresh token request-->
-      <Endpoint Id="Token" UserJourneyReferenceId="RedeemRefreshToken" />
-    </Endpoints>
-    <TechnicalProfile Id="PolicyProfile">
-      <DisplayName>PolicyProfile</DisplayName>
-      <Protocol Name="OpenIdConnect" />
-      <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="displayName" />
-        <OutputClaim ClaimTypeReferenceId="givenName" />
-        <OutputClaim ClaimTypeReferenceId="surname" />
-        <OutputClaim ClaimTypeReferenceId="email" />
-        <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
-        <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
-
-      </OutputClaims>
-      <SubjectNamingInfo ClaimType="sub" />
-    </TechnicalProfile>
-  </RelyingParty>
+<RelyingParty>
+  <DefaultUserJourney ReferenceId="SignUpOrSignIn" />
+  <TechnicalProfile Id="PolicyProfile">
+    <DisplayName>PolicyProfile</DisplayName>
+    <Protocol Name="OpenIdConnect" />
+    <OutputClaims>
+      <OutputClaim ClaimTypeReferenceId="displayName" />
+      <OutputClaim ClaimTypeReferenceId="givenName" />
+      <OutputClaim ClaimTypeReferenceId="surname" />
+      <OutputClaim ClaimTypeReferenceId="email" />
+      <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
+      <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
+    </OutputClaims>
+    <SubjectNamingInfo ClaimType="sub" />
+  </TechnicalProfile>
+</RelyingParty>
 </TrustFrameworkPolicy>
