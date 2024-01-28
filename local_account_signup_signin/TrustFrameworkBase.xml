@@ -874,7 +874,7 @@
 
     <UserJourney Id="SignUpOrSignIn">
       <OrchestrationSteps>
-
+      
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
@@ -908,6 +908,10 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
+
+
+
+    <!---->
 
     <UserJourney Id="ProfileEdit">
       <OrchestrationSteps>
