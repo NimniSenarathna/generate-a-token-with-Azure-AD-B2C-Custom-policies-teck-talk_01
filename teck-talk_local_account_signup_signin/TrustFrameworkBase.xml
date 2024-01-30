@@ -197,21 +197,6 @@
         <UserHelpText>Specifies whether the user was authenticated at Social IDP or local account.</UserHelpText>
       </ClaimType>
 
-      <!--claims for refresh token revocation-->
-      <ClaimType Id="refreshTokenIssuedOnDateTime">
-        <DisplayName>refreshTokenIssuedOnDateTime</DisplayName>
-        <DataType>string</DataType>
-        <AdminHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</AdminHelpText>
-        <UserHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</UserHelpText>
-      </ClaimType>
-
-      <ClaimType Id="refreshTokensValidFromDateTime">
-        <DisplayName>refreshTokensValidFromDateTime</DisplayName>
-        <DataType>string</DataType>
-        <AdminHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</AdminHelpText>
-        <UserHelpText>Used to determine if the user should be permitted to reauthenticate silently via their existing refresh token.</UserHelpText>
-      </ClaimType>
-
       <!-- SECTION II: Claims required to pass on special parameters (including some query string parameters) to other claims providers -->
 
       <ClaimType Id="nca">
@@ -291,19 +276,6 @@
           <InputParameter Id="valueToCompareTo" DataType="boolean" Value="true" />
         </InputParameters>
       </ClaimsTransformation>
-
-      <!--claims transformation for refresh token revocation -->
-      <ClaimsTransformation Id="AssertRefreshTokenIssuedLaterThanValidFromDate" TransformationMethod="AssertDateTimeIsGreaterThan">
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="refreshTokenIssuedOnDateTime" TransformationClaimType="leftOperand" />
-          <InputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" TransformationClaimType="rightOperand" />
-        </InputClaims>
-        <InputParameters>
-          <InputParameter Id="AssertIfEqualTo" DataType="boolean" Value="false" />
-          <InputParameter Id="AssertIfRightOperandIsNotPresent" DataType="boolean" Value="true" />
-          <InputParameter Id="TreatAsEqualIfWithinMillseconds" DataType="int" Value="300000" />
-        </InputParameters>
-      </ClaimsTransformation>
       
     </ClaimsTransformations>
 
@@ -381,15 +353,6 @@
         </Metadata>
       </ContentDefinition>
 
-      <!-- <ContentDefinition Id="api.localaccountpasswordreset">
-        <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
-        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:contract:selfasserted:2.1.7</DataUri>
-        <Metadata>
-          <Item Key="DisplayName">Local account change password page</Item>
-        </Metadata>
-      </ContentDefinition> -->
-
       <ContentDefinition Id="api.localaccountsignin">
         <LoadUri>~/tenant/templates/AzureBlue/selfAsserted.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
@@ -415,12 +378,12 @@
           <Protocol Name="OpenIdConnect" />
           <Metadata>
             <Item Key="ProviderName">https://sts.windows.net/</Item>
-            <Item Key="METADATA">https://login.microsoftonline.com/{tenant}/.well-known/openid-configuration</Item>
-            <Item Key="authorization_endpoint">https://login.microsoftonline.com/{tenant}/oauth2/token</Item>
+            <Item Key="METADATA">https://login.microsoftonline.com/BistecPractice.onmicrosoft.com/.well-known/openid-configuration</Item>
+            <Item Key="authorization_endpoint">https://login.microsoftonline.com/BistecPractice.onmicrosoft.com/oauth2/token</Item>
             <Item Key="response_types">id_token</Item>
             <Item Key="response_mode">query</Item>
             <Item Key="scope">email openid</Item>
-            <!-- <Item Key="grant_type">password</Item> -->
+            <Item Key="grant_type">password</Item>
 
             <!-- Policy Engine Clients -->
             <Item Key="UsePolicyInRedirectUri">false</Item>
@@ -540,27 +503,6 @@
           <IncludeTechnicalProfile ReferenceId="AAD-Common" />
         </TechnicalProfile>
 
-        <!-- Technical profiles for updating user record using objectId -->
-
-        <!-- <TechnicalProfile Id="AAD-UserWriteProfileUsingObjectId">
-          <Metadata>
-            <Item Key="Operation">Write</Item>
-            <Item Key="RaiseErrorIfClaimsPrincipalAlreadyExists">false</Item>
-            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
-          </Metadata>
-          <IncludeInSso>false</IncludeInSso>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
-          </InputClaims>
-          <PersistedClaims>
-            <PersistedClaim ClaimTypeReferenceId="objectId" />
-
-            <PersistedClaim ClaimTypeReferenceId="givenName" />
-            <PersistedClaim ClaimTypeReferenceId="surname" />
-          </PersistedClaims>
-          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
-        </TechnicalProfile> -->
-
         <!-- The following technical profile is used to read data after user authenticates. -->
         <TechnicalProfile Id="AAD-UserReadUsingObjectId">
           <Metadata>
@@ -585,41 +527,6 @@
 
       </TechnicalProfiles>
     </ClaimsProvider>
-
-    <!-- <ClaimsProvider>
-      <DisplayName>Self Asserted</DisplayName>
-      <TechnicalProfiles>
-
-        <TechnicalProfile Id="SelfAsserted-ProfileUpdate">
-          <DisplayName>User ID signup</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.selfasserted.profileupdate</Item>
-          </Metadata>
-          <IncludeInSso>false</IncludeInSso>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="userPrincipalName" /> -->
-
-            <!-- Optional claims. These claims are collected from the user and can be modified. Any claim added here should be updated in the
-                 ValidationTechnicalProfile referenced below so it can be written to directory after being updated by the user, i.e. AAD-UserWriteProfileUsingObjectId. -->
-            <!-- <InputClaim ClaimTypeReferenceId="givenName" />
-            <InputClaim ClaimTypeReferenceId="surname" />
-          </InputClaims>
-          <OutputClaims> -->
-            <!-- Required claims -->
-            <!-- <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" /> -->
-
-            <!-- Optional claims. These claims are collected from the user and can be modified. Any claim added here should be updated in the
-                 ValidationTechnicalProfile referenced below so it can be written to directory after being updated by the user, i.e. AAD-UserWriteProfileUsingObjectId. -->
-            <!-- <OutputClaim ClaimTypeReferenceId="givenName" />
-            <OutputClaim ClaimTypeReferenceId="surname" />
-          </OutputClaims>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteProfileUsingObjectId" />
-          </ValidationTechnicalProfiles>
-        </TechnicalProfile>
-      </TechnicalProfiles>
-    </ClaimsProvider> -->
 
     <ClaimsProvider>
       <DisplayName>Local Account</DisplayName>
@@ -683,53 +590,6 @@
           </ValidationTechnicalProfiles>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
         </TechnicalProfile>
-
-        <!-- This technical profile forces the user to verify the email address that they provide on the UI. Only after email is verified, the user account is
-        read from the directory. -->
-        <!-- <TechnicalProfile Id="LocalAccountDiscoveryUsingEmailAddress">
-          <DisplayName>Reset password using email address</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
-            <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
-          </CryptographicKeys>
-          <IncludeInSso>false</IncludeInSso>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="objectId" />
-            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
-            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
-
-          </OutputClaims>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AAD-UserReadUsingEmailAddress" />
-          </ValidationTechnicalProfiles>
-        </TechnicalProfile> -->
-
-        <!-- <TechnicalProfile Id="LocalAccountWritePasswordUsingObjectId">
-          <DisplayName>Change password (username)</DisplayName>
-          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
-          <Metadata>
-            <Item Key="ContentDefinitionReferenceId">api.localaccountpasswordreset</Item>
-          </Metadata>
-          <CryptographicKeys>
-            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
-          </CryptographicKeys>
-          <InputClaims>
-            <InputClaim ClaimTypeReferenceId="objectId" />
-
-          </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
-            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
-          </OutputClaims>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="AAD-UserWritePasswordUsingObjectId" />
-          </ValidationTechnicalProfiles>
-        </TechnicalProfile> -->
 
       </TechnicalProfiles>
     </ClaimsProvider>
@@ -799,39 +659,6 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-    <!--claims provider for refresh token revocation-->
-  <ClaimsProvider>
-    <DisplayName>Refresh token journey</DisplayName>
-    <TechnicalProfiles>
-      <TechnicalProfile Id="RefreshTokenReadAndSetup">
-        <DisplayName>Trustframework Policy Engine Refresh Token Setup Technical Profile</DisplayName>
-        <Protocol Name="None" />
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="objectId" />
-          <OutputClaim ClaimTypeReferenceId="refreshTokenIssuedOnDateTime" />
-           <!--Requirement: Claims that you return in the relying party technical profile output claims
-            that are not stored in Azure AD B2C, must be added to the output claims collection here-->
-          <!--
-          
-          <OutputClaim ClaimTypeReferenceId="RESTAPIclaim1" />
-          <OutputClaim ClaimTypeReferenceId="IDPclaim1" />
-           -->
-        </OutputClaims>
-      </TechnicalProfile>
-
-
-      <TechnicalProfile Id="AAD-UserReadUsingObjectId-CheckRefreshTokenDate">
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="refreshTokensValidFromDateTime" />
-          <OutputClaim ClaimTypeReferenceId="displayName" />
-        </OutputClaims>
-        <OutputClaimsTransformations>
-          <OutputClaimsTransformation ReferenceId="AssertRefreshTokenIssuedLaterThanValidFromDate" />
-        </OutputClaimsTransformations>
-        <IncludeTechnicalProfile ReferenceId="AAD-UserReadUsingObjectId" />
-      </TechnicalProfile>
-    </TechnicalProfiles>
-  </ClaimsProvider>
 
   </ClaimsProviders>
 
@@ -872,73 +699,6 @@
 
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney>
-
-    <!-- <UserJourney Id="ProfileEdit">
-      <OrchestrationSteps>
-
-        <OrchestrationStep Order="1" Type="ClaimsProviderSelection" ContentDefinitionReferenceId="api.idpselections">
-          <ClaimsProviderSelections>
-            <ClaimsProviderSelection TargetClaimsExchangeId="LocalAccountSigninEmailExchange" />
-          </ClaimsProviderSelections>
-        </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="3" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-
-        <OrchestrationStep Order="4" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="B2CUserProfileUpdateExchange" TechnicalProfileReferenceId="SelfAsserted-ProfileUpdate" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney> -->
-
-    <!-- <UserJourney Id="PasswordReset">
-      <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="PasswordResetUsingEmailAddressExchange" TechnicalProfileReferenceId="LocalAccountDiscoveryUsingEmailAddress" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="NewCredentials" TechnicalProfileReferenceId="LocalAccountWritePasswordUsingObjectId" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-      </OrchestrationSteps>
-      <ClientDefinition ReferenceId="DefaultWeb" />
-    </UserJourney> -->
-
-    <UserJourney Id="RedeemRefreshToken">
-      <PreserveOriginalAssertion>false</PreserveOriginalAssertion>
-      <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="RefreshTokenSetupExchange" TechnicalProfileReferenceId="RefreshTokenReadAndSetup" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        
-        <!-- Extra steps can be added before or after this step for REST API or claims transformation calls-->
-
-        <OrchestrationStep Order="2" Type="ClaimsExchange">
-          <ClaimsExchanges>
-            <ClaimsExchange Id="CheckRefreshTokenDateFromAadExchange" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId-CheckRefreshTokenDate" />
-          </ClaimsExchanges>
-        </OrchestrationStep>
-        <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
-      </OrchestrationSteps>
     </UserJourney>
     
   </UserJourneys>
